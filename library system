@@ -1,0 +1,164 @@
+books = [
+    {"title": "1984", "author": "George Orwell", "isbn": "1234567890", "status": "available"},
+    {"title": "To Kill a Mockingbird", "author": "Harper Lee", "isbn": "0987654321", "status": "available"}
+]
+
+users = [
+    {"user_id": "001", "name": "Colin Bonehill"},
+    {"user_id": "002", "name": "Jane Smith"}
+]
+
+def display_menu():
+    """Display the main menu options."""
+    print("\nLibrary Management System")
+    print("1. Add Book")
+    print("2. Search Book")
+    print("3. Check Out Book")
+    print("4. Return Book")
+    print("5. Add User")
+    print("6. Delete User")
+    print("7. Display All Books")
+    print("8. Exit")
+
+def add_book():
+    """Add a new book to the system."""
+    title = input("Enter book title: ").strip()
+    author = input("Enter book author: ").strip()
+    isbn = input("Enter book ISBN: ").strip()
+
+    # Check if any of the fields are empty
+    if not title or not author or not isbn:
+        print("Error: All fields must be filled.")
+        return
+
+    # Check if the book with the same ISBN already exists
+    for book in books:
+        if book['isbn'] == isbn:
+            print("Error: Book with this ISBN already exists.")
+            return
+
+    # Add the book to the list
+    books.append({"title": title, "author": author, "isbn": isbn, "status": "available"})
+    print("Book added successfully!")
+
+def search_books():
+    """Search for books by title or author."""
+    query = input("Enter title or author to search: ").strip().lower()
+    if not query:
+        print("Error: Search query cannot be empty.")
+        return
+
+    results = [book for book in books if query in book['title'].lower() or query in book['author'].lower()]
+
+    if not results:
+        print("No books found.")
+    else:
+        for book in results:
+            print(f"Title: {book['title']}, Author: {book['author']}, ISBN: {book['isbn']}, Status: {book['status']}")
+
+def check_out_book():
+    """Check out a book by its ISBN."""
+    isbn = input("Enter book ISBN to check out: ").strip()
+    if not isbn:
+        print("Error: ISBN cannot be empty.")
+        return
+
+    for book in books:
+        if book['isbn'] == isbn:
+            if book['status'] == "available":
+                book['status'] = "checked out"
+                print("Book checked out successfully!")
+                return
+            else:
+                print("Error: Book is already checked out.")
+                return
+
+    print("Error: Book not found.")
+
+def return_book():
+    """Return a checked-out book by its ISBN."""
+    isbn = input("Enter book ISBN to return: ").strip()
+    if not isbn:
+        print("Error: ISBN cannot be empty.")
+        return
+
+    for book in books:
+        if book['isbn'] == isbn:
+            if book['status'] == "checked out":
+                book['status'] = "available"
+                print("Book returned successfully!")
+                return
+            else:
+                print("Error: Book was not checked out.")
+                return
+
+    print("Error: Book not found.")
+
+def add_user():
+    """Add a new user to the system."""
+    user_id = input("Enter user ID: ").strip()
+    name = input("Enter user name: ").strip()
+
+    if not user_id or not name:
+        print("Error: All fields must be filled.")
+        return
+
+    for user in users:
+        if user['user_id'] == user_id:
+            print("Error: User with this ID already exists.")
+            return
+
+    users.append({"user_id": user_id, "name": name})
+    print("User added successfully!")
+
+def delete_user():
+    """Delete a user by their ID."""
+    user_id = input("Enter user ID to delete: ").strip()
+    if not user_id:
+        print("Error: User ID cannot be empty.")
+        return
+
+    for user in users:
+        if user['user_id'] == user_id:
+            users.remove(user)
+            print("User deleted successfully!")
+            return
+
+    print("Error: User not found.")
+
+def display_books():
+    """Display all books in the system."""
+    if not books:
+        print("No books available.")
+    else:
+        for book in books:
+            print(f"Title: {book['title']}, Author: {book['author']}, ISBN: {book['isbn']}, Status: {book['status']}")
+
+def main():
+    """Main function to drive the library management system."""
+    while True:
+        display_menu()
+        choice = input("Enter your choice: ").strip()
+
+        if choice == "1":
+            add_book()
+        elif choice == "2":
+            search_books()
+        elif choice == "3":
+            check_out_book()
+        elif choice == "4":
+            return_book()
+        elif choice == "5":
+            add_user()
+        elif choice == "6":
+            delete_user()
+        elif choice == "7":
+            display_books()
+        elif choice == "8":
+            print("Exiting the system. Goodbye!")
+            break
+        else:
+            print("Error: Invalid choice. Please enter a number between 1 and 8.")
+
+if __name__ == "__main__":
+    main()
